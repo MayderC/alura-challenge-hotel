@@ -24,6 +24,8 @@ public class User implements UserDetails {
     private Integer id;
     private String firstname;
     private String lastname;
+
+    @Column(unique = true)
     private String email;
     private String password;
 
@@ -42,17 +44,17 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

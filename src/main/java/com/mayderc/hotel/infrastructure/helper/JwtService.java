@@ -32,7 +32,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = getUsername(token);
-        return  (username.equals(userDetails.getUsername())) && !isTokenExpired(token)
+        return  (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -64,7 +64,7 @@ public class JwtService {
     }
 
     private Key getSigninKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode("AAAAAAAASXXXXXXXDSDSDCSCSDCSDHCUYGFSDYUCSDOIUCSDHUYCSCGBSDUYCGSBUYASAXSAXSASXAS64X16SASX8A4XASX68A4");
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
