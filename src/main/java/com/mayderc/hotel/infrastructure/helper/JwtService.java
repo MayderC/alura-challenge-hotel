@@ -1,19 +1,19 @@
 package com.mayderc.hotel.infrastructure.helper;
+import com.mayderc.hotel.application.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
+
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -27,12 +27,29 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", ((User) userDetails).getId());
+        claims.put("email", userDetails.getUsername());
+
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        claims.put("role", roles);
+        //print authoirities
+        System.out.println("authorities: " + userDetails.getAuthorities());
+        return generateToken(claims, userDetails);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
+        //print
+        System.out.println("isTokenValid");
         final String username = getUsername(token);
-        return  (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        var result =(username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        //print result
+        System.out.println("result: " + result);
+        return result;
     }
 
     private boolean isTokenExpired(String token) {
@@ -44,12 +61,13 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraCalims, UserDetails userDatails){
+        //set role to extra claims from user details Role
         return Jwts
                 .builder()
                 .setClaims(extraCalims)
                 .setSubject(userDatails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60 *5))
+                .setExpiration(new Date(System.currentTimeMillis() + ( 1000 * 60 * 5)))
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -36,4 +36,17 @@ public class BookingsService {
         return modelMapper.map(response, BookingResponse.class);
     }
 
+
+    public BookingResponse update(Integer id, AddBookingRequest request) throws Exception {
+
+        var booking = this.bookingRepository.findById(id);
+        if(!booking.isPresent()) throw new Exception("not found");
+
+        if(!booking.get().checkIn.equals(request.checkIn))booking.get().setCheckIn(request.checkIn);
+        if(!booking.get().checkOut.equals(request.checkOut))booking.get().setCheckOut(request.checkOut);
+
+        var response = this.bookingRepository.save(booking.get());
+        return modelMapper.map(response, BookingResponse.class);
+    }
+
 }

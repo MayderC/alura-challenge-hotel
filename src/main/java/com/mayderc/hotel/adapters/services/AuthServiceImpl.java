@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
         entity.setFirstname(request.firstname);
         entity.setPassword(passwordEncoder.encode(request.password));
         entity.setLastname(request.lastname);
-        entity.setRole(Role.USER);
+        entity.setRole(Role.ROLE_USER);
         System.out.println(entity);
         var user = userRepository.save(entity);
         var jwtToken = jwtService.generateToken(user);

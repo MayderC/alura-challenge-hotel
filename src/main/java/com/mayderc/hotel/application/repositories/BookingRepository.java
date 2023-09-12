@@ -11,4 +11,5 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Bookings, Integer> {
     Optional<Bookings> findBookingsByCustomer_Id(Integer id);
+
 }

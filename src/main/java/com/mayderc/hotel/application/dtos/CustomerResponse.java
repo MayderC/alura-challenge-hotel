@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCustomerRequest {
+public class CustomerResponse {
 
+    public Integer Id;
     public String firstname;
     public String lastname;
     public String email;
